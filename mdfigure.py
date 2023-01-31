@@ -7,7 +7,7 @@ copyright @2015 Alicia Schep <aschep@gmail.com>
 import markdown
 from markdown.treeprocessors import Treeprocessor
 from markdown import Extension
-from markdown.util import etree
+import xml.etree.ElementTree as etree
 from copy import copy
 
 
@@ -21,7 +21,7 @@ class FigureTreeprocessor(Treeprocessor):
 
     def run(self, root):
         parent_map = {c: p for p in root.iter() for c in p}
-        images = root.getiterator("img")
+        images = root.iter("img")
         for count, image in enumerate(images):
             caption = image.attrib["alt"]
             image.set("alt", caption)
@@ -66,10 +66,10 @@ class FigureExtension(Extension):
         }
         super(FigureExtension, self).__init__(**kwargs)
 
-    def extendMarkdown(self, md, md_globals):
+    def extendMarkdown(self, md):
         figures = FigureTreeprocessor(md,
                                       self.getConfig('figure_classes'),
                                       self.getConfig('img_classes'),
                                       self.getConfig('figcaption_classes'))
-        md.treeprocessors.add("figure", figures, "_end")
+        md.treeprocessors.register(figures, "figure", 128)
         md.registerExtension(self)
