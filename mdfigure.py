@@ -71,5 +71,5 @@ class FigureExtension(Extension):
                                       self.getConfig('figure_classes'),
                                       self.getConfig('img_classes'),
                                       self.getConfig('figcaption_classes'))
-        md.treeprocessors.register(figures, "figure", 128)
+        md.treeprocessors.register(figures, "figure", 15)
         md.registerExtension(self)
